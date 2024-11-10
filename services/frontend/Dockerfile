@@ -8,21 +8,24 @@ RUN apt-get update && apt-get install -y \
     python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements and install packages
 COPY requirements.txt .
-
-# Install Python packages
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Copy application code
 COPY . .
+
+# Create streamlit config directory and add config
+RUN mkdir -p /root/.streamlit
+RUN echo '\
+[server]\n\
+port = 8501\n\
+address = "0.0.0.0"\n\
+baseUrlPath = ""\n\
+enableCORS = false\n\
+enableXsrfProtection = false\n\
+' > /root/.streamlit/config.toml
 
 EXPOSE 8501
 
-# Configure Streamlit
-RUN mkdir -p /root/.streamlit
-RUN echo "\
-[server]\n\
-enableCORS = false\n\
-enableXsrfProtection = false\n\
-" > /root/.streamlit/config.toml
-
-CMD ["streamlit", "run", "main.py", "--server.address", "0.0.0.0"]
+CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]

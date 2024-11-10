@@ -2,18 +2,20 @@ import streamlit as st
 import requests
 import pandas as pd
 from datetime import datetime
+import os
 
-# Service URLs
-USER_SERVICE_URL = "http://user-service:8000"
-PRODUCT_SERVICE_URL = "http://product-service:8000"
-ORDER_SERVICE_URL = "http://order-service:8000"
-
-# Page Configuration
+# Configure Streamlit page settings
 st.set_page_config(
     page_title="E-Commerce Platform",
     page_icon="🛍️",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
+
+# Service URLs - use environment variables or defaults
+USER_SERVICE_URL = os.getenv("USER_SERVICE_URL", "http://user-service:8000")
+PRODUCT_SERVICE_URL = os.getenv("PRODUCT_SERVICE_URL", "http://product-service:8000")
+ORDER_SERVICE_URL = os.getenv("ORDER_SERVICE_URL", "http://order-service:8000")
 
 # Session State Initialization
 if 'token' not in st.session_state:

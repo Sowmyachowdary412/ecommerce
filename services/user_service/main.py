@@ -12,7 +12,7 @@ import jwt
 app = FastAPI()
 
 # Security
-SECRET_KEY = os.getenv("SECRET_KEY", "UHqKevZgab5h0NogfNIX2n7F-nN_BlyPbzPb6DIv0aE")
+SECRET_KEY = os.getenv("SECRET_KEY", "zpQcxGM88LC6fkwBvYjI-28-jcKW5ULTpZlDKDkPgGA")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
