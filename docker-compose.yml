@@ -1,0 +1,48 @@
+services:
+  user-service:
+    build: ./services/user_service
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./data/databases:/data/databases
+    environment:
+      - DB_PATH=/data/databases/users.db
+      - SECRET_KEY=${SECRET_KEY}
+      - ALGORITHM=${ALGORITHM}
+      - ACCESS_TOKEN_EXPIRE_MINUTES=${ACCESS_TOKEN_EXPIRE_MINUTES}
+    command: uvicorn main:app --host 0.0.0.0 --reload
+
+  product-service:
+    build: ./services/product_service
+    ports:
+      - "8002:8000"
+    volumes:
+      - ./data/databases:/data/databases
+    environment:
+      - DB_PATH=/data/databases/products.db
+    command: uvicorn main:app --host 0.0.0.0 --reload
+
+  order-service:
+    build: ./services/order_service
+    ports:
+      - "8003:8000"
+    volumes:
+      - ./data/databases:/data/databases
+    environment:
+      - DB_PATH=/data/databases/orders.db
+    command: uvicorn main:app --host 0.0.0.0 --reload
+
+  frontend:
+    build: 
+      context: ./services/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data/databases:/data/databases
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
